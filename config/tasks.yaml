@@ -1,0 +1,219 @@
+literature_discovery_task:
+  description: >
+    Conduct comprehensive academic literature search for "{research_topic}" using specialized search tools. 
+    Focus on discovering:
+    
+    1. SYSTEMATIC REVIEWS and META-ANALYSES (highest priority)
+    2. METHODOLOGY PAPERS with clear implementation details
+    3. HIGH-IMPACT RESEARCH from Nature, Science, Cell, and specialized neuroscience journals
+    4. RECENT PUBLICATIONS (2020-2025) showing latest developments
+    5. FOUNDATIONAL PAPERS that establish theoretical frameworks
+    
+    For each paper discovered, evaluate:
+    - Research methodology rigor and reproducibility
+    - Practical implementation requirements
+    - Theoretical foundations and validation approaches
+    - Relevance to preclinical neuroscience applications
+    - Citation impact and academic recognition
+    
+    Search Strategy:
+    - Use academic databases and high-impact journal sources
+    - Include terms: "systematic review", "methodology", "preclinical", "biomarker", "neurodegeneration"
+    - Prioritize papers with clear methodological frameworks
+    - Focus on translational research with clinical relevance
+    
+    Quality Assessment Criteria:
+    - Impact factor and journal reputation
+    - Methodology transparency and detail
+    - Reproducibility and validation
+    - Practical applicability to target discovery/biomarker development
+  
+  expected_output: >
+    A comprehensive literature analysis including:
+    
+    1. **High-Priority Papers List**: 5-8 papers with complete bibliographic details, quality scores (1-5), 
+       and relevance ratings for preclinical neuroscience applications
+    
+    2. **Methodological Framework Summary**: Key methodological approaches extracted from the literature, 
+       including implementation requirements, validation strategies, and best practices
+    
+    3. **Research Quality Assessment**: Detailed evaluation of each paper's scientific rigor, 
+       reproducibility, and practical value with specific quality metrics
+    
+    4. **Theoretical Foundation Report**: Core theoretical concepts and frameworks necessary for 
+       understanding and implementing the methodologies
+    
+    5. **Research Gaps Analysis**: Identification of missing elements in current research and 
+       opportunities for novel approaches
+    
+    6. **Implementation Recommendations**: Specific guidance on which papers provide the best 
+       foundation for practical application and learning progression
+    
+    Format each resource as: Title | Authors | Journal | Year | DOI | Quality Score | Implementation Difficulty | Key Insights
+
+code_discovery_task:
+  description: >
+    Discover and validate GitHub repositories and code implementations for "{research_topic}" with focus on:
+    
+    1. WORKING IMPLEMENTATIONS with validated code quality
+    2. COMPREHENSIVE DOCUMENTATION and installation guides
+    3. ACTIVE MAINTENANCE with recent commits and community engagement
+    4. EDUCATIONAL VALUE with clear examples and tutorials
+    5. PRODUCTION READINESS vs research prototype classification
+    
+    Technical Validation Requirements:
+    - Code quality assessment (documentation, testing, structure)
+    - Installation and dependency verification
+    - Example execution and result validation
+    - Performance benchmarking when possible
+    - Community engagement metrics (stars, forks, issues)
+    
+    Search Strategy:
+    - Target GitHub, GitLab, and academic code repositories
+    - Include terms: "implementation", "pytorch", "tensorflow", "tutorial", "example"
+    - Prioritize repositories with educational examples
+    - Focus on neuroscience and machine learning intersections
+    
+    Evaluation Criteria:
+    - Code documentation quality and completeness
+    - Installation simplicity and dependency management
+    - Example datasets and preprocessing scripts availability
+    - Community support and maintenance activity
+    - Licensing and usage permissions
+  
+  expected_output: >
+    A curated collection of validated code resources including:
+    
+    1. **Validated Repository List**: 4-6 high-quality repositories with URLs, GitHub metrics 
+       (stars, forks, last commit), and technical quality assessments
+    
+    2. **Installation and Setup Guides**: Detailed technical requirements, dependency lists, 
+       and step-by-step installation instructions for each repository
+    
+    3. **Code Quality Reviews**: Comprehensive assessment of code structure, documentation quality, 
+       testing coverage, and maintainability with specific technical recommendations
+    
+    4. **Performance Analysis**: Benchmarking results, computational requirements, and 
+       scalability assessments where available
+    
+    5. **Learning Pathway Integration**: Recommendations for which repositories are suitable for 
+       beginners vs advanced users, and optimal learning sequence
+    
+    6. **Technical Risk Assessment**: Evaluation of repository maintenance status, community support, 
+       and long-term viability for learning and research use
+    
+    Format each resource as: Repository Name | URL | Stars/Forks | Last Update | Quality Score | 
+    Difficulty Level | Technical Notes | Learning Value
+
+educational_curation_task:
+  description: >
+    Curate comprehensive educational resources for "{research_topic}" with focus on effective learning progression:
+    
+    1. TUTORIAL SEQUENCES from beginner to advanced levels
+    2. INTERACTIVE CONTENT including Jupyter notebooks and Google Colab examples
+    3. VIDEO LECTURES and online courses from reputable sources
+    4. DOCUMENTATION and official guides for relevant tools and frameworks
+    5. BLOG POSTS and articles with practical implementation insights
+    
+    Learning Effectiveness Assessment:
+    - Clarity of explanations and step-by-step guidance
+    - Practical examples with working code
+    - Progressive difficulty and skill building
+    - Integration with theoretical foundations
+    - Community feedback and engagement metrics
+    
+    Search Strategy:
+    - Educational platforms (Coursera, edX, Udemy, YouTube)
+    - Technical blogs (Medium, Towards Data Science, personal researcher blogs)
+    - Official documentation sites
+    - Interactive platforms (Kaggle, Google Colab, Jupyter)
+    - Academic course materials and lecture notes
+    
+    Curation Criteria:
+    - Educational clarity and pedagogical effectiveness
+    - Practical applicability and hands-on learning
+    - Prerequisites clearly defined
+    - Learning outcome expectations
+    - Community validation and positive feedback
+  
+  expected_output: >
+    A comprehensive educational resource package including:
+    
+    1. **Structured Learning Pathway**: 8-12 educational resources organized by difficulty level 
+       (beginner, intermediate, advanced) with clear progression sequence
+    
+    2. **Resource Quality Assessment**: Detailed evaluation of educational effectiveness, 
+       content quality, and learning outcome potential with specific ratings
+    
+    3. **Prerequisites and Learning Objectives**: Clear documentation of mathematical and 
+       programming prerequisites for each resource, with expected learning outcomes
+    
+    4. **Interactive Content Collection**: Curated list of hands-on tutorials, Jupyter notebooks, 
+       and interactive examples with accessibility and execution instructions
+    
+    5. **Learning Gap Analysis**: Identification of missing educational content areas where 
+       additional resources would be beneficial for comprehensive skill development
+    
+    6. **Integration Strategy**: Recommendations for combining educational resources with 
+       academic papers and code implementations for optimal learning effectiveness
+    
+    Format each resource as: Resource Title | Type (Course/Tutorial/Blog/Video) | Platform | 
+    Duration | Difficulty | Prerequisites | Quality Score | Learning Outcomes
+
+knowledge_synthesis_task:
+  description: >
+    Synthesize and integrate findings from academic literature, code implementations, and educational 
+    resources for "{research_topic}" into a comprehensive, actionable learning package. Focus on:
+    
+    1. STRATEGIC INTEGRATION of theory, practice, and learning resources
+    2. PRIORITY RANKING based on relevance to preclinical neuroscience career goals
+    3. LEARNING PATHWAY OPTIMIZATION for efficient skill development
+    4. QUALITY ASSURANCE and final validation of all recommendations
+    5. INDUSTRY ALIGNMENT with precision medicine and biomarker discovery applications
+    
+    Synthesis Requirements:
+    - Cross-reference findings between literature, code, and educational content
+    - Identify optimal learning sequences that build from theory to practice
+    - Assess strategic value for Neumora-style precision neuroscience applications
+    - Create actionable next steps and implementation guidance
+    - Establish quality benchmarks and success metrics
+    
+    Integration Analysis:
+    - Map connections between academic papers and available implementations
+    - Identify educational resources that bridge theory-practice gaps
+    - Highlight complementary resources that work well together
+    - Assess completeness of available learning materials
+    - Recommend additional resources or activities if needed
+    
+    Strategic Prioritization:
+    - Evaluate relevance to target discovery and biomarker development
+    - Consider industry applications and career development value
+    - Balance foundational knowledge with cutting-edge developments
+    - Account for time investment vs learning outcome ratios
+  
+  expected_output: >
+    An integrated learning package with strategic recommendations including:
+    
+    1. **Executive Summary**: Concise overview of key findings, strategic recommendations, 
+       and high-priority learning objectives for preclinical neuroscience applications
+    
+    2. **Priority-Ranked Resource Matrix**: Comprehensive scoring and ranking of all discovered 
+       resources based on quality, relevance, and strategic value with specific justifications
+    
+    3. **Optimized Learning Roadmap**: Sequential learning pathway with estimated timelines, 
+       milestones, and prerequisites that efficiently builds from foundational concepts to 
+       advanced practical applications
+    
+    4. **Theory-Practice Integration Map**: Detailed connections showing how academic papers 
+       relate to code implementations and educational resources, with recommended study sequences
+    
+    5. **Career Development Strategy**: Specific recommendations for skill development priorities 
+       that align with precision neuroscience industry needs and Neumora-style applications
+    
+    6. **Implementation Action Plan**: Concrete next steps including recommended starting points, 
+       resource acquisition, setup instructions, and success metrics for tracking progress
+    
+    7. **Quality Assurance Report**: Final validation of resource quality, completeness assessment, 
+       and identification of any critical gaps that need to be addressed
+    
+    Format: Structured report with clear sections, priority scores, timelines, and actionable recommendations

@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.p8
+*.pub
+rsa_key*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Research outputs and logs
+outputs/
+_outputs/
+*.log
+research_results/*.md
+research_results/*.json
+research_results/*.pdf
+
+
+# Keep structure but ignore content in results subdirectories
+research_results/**/
+!research_results/.gitkeep
+!research_results/README.md
+
+# Hydra outputs (keep structure, ignore timestamped runs)
+outputs/
+!outputs/.gitkeep
+
+# Data files (never commit actual data)
+*.csv
+*.xlsx
+*.png
+*.parquet
+*.pdf
+data/
+raw_data/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Package managers
+.coverage
+htmlcov/

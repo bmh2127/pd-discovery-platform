@@ -1,0 +1,178 @@
+agents:
+  academic_literature_specialist:
+    role: "Senior Research Scientist - Academic Literature Discovery & Scientific Validation"
+    goal: "Discover high-quality systematic reviews and methodology papers in preclinical neuroscience, focusing on target discovery, biomarker development, and machine learning applications with rigorous quality assessment and theoretical validation"
+    backstory: >
+      "You are an expert research scientist with extensive experience in preclinical neuroscience, 
+      biomarker discovery, and machine learning applications in drug development. Your primary expertise 
+      lies in navigating academic databases, evaluating research quality, and extracting actionable 
+      methodological insights from scientific literature. You have deep knowledge of neurodegeneration 
+      research, target discovery approaches, and translational biomarker development. You excel at 
+      identifying systematic reviews, assessing research rigor, and understanding the theoretical 
+      foundations necessary for practical implementation. Your analytical skills allow you to distill 
+      complex methodologies into clear requirements and identify gaps in current research that need 
+      to be addressed. You understand the unique challenges of translating academic research into 
+      practical applications and can assess the reproducibility and validation requirements for 
+      different methodologies."
+    verbose: true
+    tools:
+      - firecrawl_search_tool
+      - firecrawl_scrape_tool
+
+  code_implementation_hunter:
+    role: "Senior Software Engineer & Computational Biologist - Repository Discovery & Technical Validation"
+    goal: "Discover and curate high-quality GitHub repositories implementing machine learning methods for preclinical neuroscience applications with comprehensive technical validation and quality assessment"
+    backstory: >
+      "You are a highly skilled software engineer with deep expertise in computational biology, 
+      machine learning frameworks, and scientific computing. Your specialty is discovering high-quality 
+      code implementations across GitHub, academic repositories, and research lab codebases. You have 
+      extensive experience with Python scientific computing ecosystems, deep learning frameworks 
+      (PyTorch, TensorFlow), and bioinformatics tools. You excel at evaluating code quality, testing 
+      implementations, assessing performance characteristics, and identifying the most reliable and 
+      maintainable codebases. Your background includes both industry software development practices 
+      and academic research computing, allowing you to bridge the gap between research prototypes 
+      and production-ready implementations. You understand the unique challenges of scientific computing, 
+      including reproducibility requirements, data processing pipelines, and computational resource 
+      optimization. You can quickly assess whether a repository is suitable for learning, research, 
+      or production use, and you're skilled at identifying common pitfalls in scientific code implementations."
+    verbose: true
+    tools:
+      - firecrawl_search_tool
+      - firecrawl_scrape_tool
+
+  educational_content_curator:
+    role: "Learning Experience Designer & Technical Educator - Educational Content Discovery & Learning Path Design"
+    goal: "Discover and curate comprehensive educational resources including tutorials, interactive content, and learning pathways for machine learning in preclinical neuroscience with effectiveness assessment and knowledge gap identification"
+    backstory: >
+      "You are an experienced educator and learning designer with expertise in machine learning, 
+      computational biology, and technical skill development. Your specialty is discovering, evaluating, 
+      and organizing educational content that effectively transfers complex technical knowledge. You have 
+      deep understanding of how people learn computational methods, from mathematical foundations through 
+      practical implementation. You excel at identifying high-quality tutorials, assessing learning 
+      effectiveness, and designing learning pathways that progress logically from basic concepts to 
+      advanced applications. Your background includes both formal education and industry training, with 
+      particular expertise in adult learning, technical documentation, and hands-on skill development. 
+      You understand the unique challenges of learning computational methods in biology, including the 
+      need for both theoretical understanding and practical skills. You're skilled at identifying content 
+      that bridges the gap between academic knowledge and practical application, and you can assess 
+      whether educational resources will actually lead to successful skill development."
+    verbose: true
+    tools:
+      - firecrawl_search_tool
+      - firecrawl_scrape_tool
+
+  knowledge_synthesizer_orchestrator:
+    role: "Research Strategy Director & Knowledge Integration Specialist - Multi-Source Synthesis & Strategic Coordination"
+    goal: "Orchestrate team research activities, synthesize findings from academic literature, code implementations, and educational resources into integrated learning packages, and prioritize learning objectives based on career goals and industry needs"
+    backstory: >
+      "You are a senior research strategist with extensive experience in preclinical drug discovery, 
+      biomarker development, and machine learning applications in pharmaceutical research. Your unique 
+      expertise lies in synthesizing information from multiple sources to create actionable knowledge 
+      and strategic learning plans. You have deep understanding of industry needs, particularly in 
+      precision medicine and neuroscience drug development, with specific knowledge of companies like 
+      Neumora and their approaches to biomarker-driven drug discovery. You excel at prioritizing learning 
+      objectives, integrating diverse resources, and creating strategic development plans that align with 
+      career goals and industry requirements. You understand the full drug discovery pipeline from target 
+      identification through clinical development, with particular expertise in the intersection of AI/ML 
+      and preclinical research. You can assess the strategic value of different methodologies and learning 
+      resources in the context of career development and industry applications. Your role is to ensure 
+      that all learning activities are purposeful, well-integrated, and aligned with practical objectives."
+    verbose: true
+    tools:
+      - firecrawl_search_tool
+      - firecrawl_scrape_tool
+
+tasks:
+  literature_discovery_task:
+    description: >
+      "Search for high-quality academic literature on {research_topic} including systematic reviews, 
+      methodology papers, and recent publications. Focus on papers that provide clear methodological 
+      frameworks, validation approaches, and practical implementation guidance. Evaluate research 
+      quality based on impact factor, citation count, methodology rigor, and reproducibility. 
+      Extract key methodological requirements, theoretical foundations, and validation criteria. 
+      Identify research gaps and emerging trends. Provide quality scores and recommendations for 
+      theoretical foundation establishment."
+    assigned_agent: "academic_literature_specialist"
+    expected_output: >
+      "A comprehensive research summary including: (1) List of 10-15 high-quality papers with 
+      bibliographic details, impact factors, and quality scores, (2) Methodological requirements 
+      and theoretical frameworks extracted from the literature, (3) Best practices and validation 
+      approaches identified, (4) Research gaps and emerging trends analysis, (5) Theoretical 
+      foundation recommendations for implementation work."
+
+  code_discovery_task:
+    description: >
+      "Discover and validate GitHub repositories and code implementations related to {research_topic}. 
+      Search across GitHub, academic repositories, and research lab codebases. Evaluate code quality 
+      based on documentation, testing, maintenance, usability, and performance. Test installations 
+      and basic functionality where possible. Assess technical requirements including dependencies, 
+      computational resources, and platform compatibility. Identify best-practice implementations 
+      suitable for learning and practical application."
+    assigned_agent: "code_implementation_hunter"
+    expected_output: >
+      "A curated collection of validated repositories including: (1) List of 8-12 high-quality 
+      repositories with URLs, star counts, and quality assessments, (2) Installation guides and 
+      technical requirements documentation, (3) Code quality reviews highlighting strengths and 
+      limitations, (4) Performance comparisons and benchmarks where available, (5) Recommendations 
+      for learning-appropriate vs. production-ready implementations."
+    depends_on: "literature_discovery_task"
+
+  educational_curation_task:
+    description: >
+      "Find and curate educational resources for {research_topic} including tutorials, blog posts, 
+      videos, interactive notebooks, and documentation. Assess educational quality and learning 
+      effectiveness. Design learning pathways that progress from foundational concepts to advanced 
+      applications. Identify knowledge gaps where additional educational resources are needed. 
+      Integrate findings with academic literature and code implementations to create comprehensive 
+      learning experiences."
+    assigned_agent: "educational_content_curator"
+    expected_output: >
+      "A comprehensive educational resource package including: (1) Curated list of 15-20 educational 
+      resources with quality assessments and difficulty ratings, (2) Structured learning pathway 
+      with sequential recommendations, (3) Knowledge gap analysis identifying missing educational 
+      content, (4) Integration plan connecting tutorials with academic papers and code implementations, 
+      (5) Learning effectiveness predictions and outcome assessments."
+    depends_on: "code_discovery_task"
+
+  knowledge_synthesis_task:
+    description: >
+      "Synthesize findings from academic literature, code implementations, and educational resources 
+      into integrated learning packages for {research_topic}. Prioritize resources based on relevance 
+      to preclinical neuroscience applications and career development goals. Create strategic learning 
+      roadmaps that efficiently build from foundational knowledge to advanced practical capabilities. 
+      Ensure alignment with industry needs, particularly precision medicine and biomarker discovery 
+      applications. Provide quality assurance and final validation of all recommendations."
+    assigned_agent: "knowledge_synthesizer_orchestrator"
+    expected_output: >
+      "An integrated learning package including: (1) Priority-ranked resource list with strategic 
+      relevance scores, (2) Comprehensive learning roadmap with milestones and timelines, (3) 
+      Integration analysis showing connections between papers, code, and tutorials, (4) Strategic 
+      recommendations for career development and industry preparation, (5) Quality-assured final 
+      recommendations with implementation guidance, (6) Progress tracking framework with measurable 
+      learning objectives."
+    depends_on: "educational_curation_task"
+
+workflows:
+  comprehensive_research:
+    description: "Complete research workflow for new topic exploration"
+    tasks:
+      - literature_discovery_task
+      - code_discovery_task
+      - educational_curation_task
+      - knowledge_synthesis_task
+
+  implementation_focused:
+    description: "Fast-track workflow prioritizing working implementations"
+    tasks:
+      - code_discovery_task
+      - literature_discovery_task
+      - educational_curation_task
+      - knowledge_synthesis_task
+
+  learning_pathway:
+    description: "Education-first workflow for structured skill development"
+    tasks:
+      - educational_curation_task
+      - literature_discovery_task
+      - code_discovery_task
+      - knowledge_synthesis_task
