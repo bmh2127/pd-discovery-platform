@@ -138,12 +138,24 @@ pd-discovery-platform/
 ├── parsing.py              # Research data parsing and validation
 ├── tools.py                # Web search and extraction tools
 ├── clinical_correlation.py # Clinical data analysis
-├── differential_expression.py # Gene expression analysis
+├── main.py                 # Main entry point
+├── test_ai_setup.py        # AI setup testing
 ├── config/                 # Agent and task configurations
 │   ├── agents.yaml
 │   └── tasks.yaml
+├── MCP/                    # Model Context Protocol servers
+│   ├── string-mcp/         # STRING database integration
+│   ├── biogrid-mcp/        # BioGRID database integration  
+│   ├── pride-mcp/          # PRIDE database integration
+│   ├── tests/              # MCP-specific tests
+│   └── docs/               # MCP documentation
+├── tests/                  # Main test suite
 ├── research_results/       # Generated research reports
-└── data/                   # Input datasets and analysis outputs
+├── references/             # Reference papers and documentation
+├── ScienceDirect_files_*/  # Downloaded research files
+├── Data.xlsx               # Input datasets
+├── differential_expression.xlsx # Analysis results
+└── *.png                   # Generated visualization plots
 ```
 
 ### Data Flow
@@ -220,6 +232,38 @@ Multi-level validation process:
 3. **Learning Path Validation**: Educational progression logic
 4. **Final Report Generation**: Quality-assured outputs
 
+## 🔗 Model Context Protocol (MCP) Servers
+
+The platform integrates with specialized MCP servers for biological database access:
+
+### Available MCP Servers
+- **string-mcp**: Integration with STRING protein interaction database
+  - Protein mapping and network analysis
+  - Functional enrichment analysis
+  - Dopaminergic pathway markers
+  
+- **biogrid-mcp**: BioGRID biological interaction database integration
+  - Protein-protein interaction data
+  - Genetic interaction networks
+  - Publication-backed interaction evidence
+
+- **pride-mcp**: PRIDE proteomics database integration
+  - Mass spectrometry data access
+  - Protein expression profiles
+  - Proteomics experiment metadata
+
+### Usage Example
+```python
+# Test MCP server functionality
+cd MCP/tests
+python test_string_mcp.py
+
+# Use in research workflow
+from MCP.string_mcp.server import map_proteins, get_network
+proteins = ["SNCA", "PARK2", "TH"]  # Parkinson's disease markers
+network = await get_network(proteins)
+```
+
 ## 📈 Output Examples
 
 ### Research Report Structure
@@ -245,6 +289,8 @@ Generated reports include:
 - **Scikit-learn**: Machine learning algorithms
 - **Matplotlib/Seaborn**: Data visualization
 - **Pydantic**: Data validation and settings management
+- **Pytest**: Testing framework for validation and QA
+- **Jupyter**: Interactive analysis and experimentation
 
 ### API Dependencies
 - **OpenAI**: LLM capabilities for agents
@@ -275,6 +321,29 @@ All research outputs undergo rigorous quality assessment:
 - Educational value assessment
 - Relevance scoring for preclinical applications
 
+## 🧪 Testing
+
+### Running Tests
+The platform includes comprehensive test suites for validation:
+
+```bash
+# Test AI setup and configuration
+python test_ai_setup.py
+
+# Run MCP server tests
+cd MCP/tests
+python -m pytest test_string_mcp.py -v
+
+# Run all tests (if pytest is configured)
+python -m pytest tests/ -v
+```
+
+### Test Coverage
+- **AI Setup Tests**: Validate OpenAI API connectivity and model access
+- **MCP Integration Tests**: Test protein database connectivity and data retrieval
+- **Unit Tests**: Core functionality validation
+- **Integration Tests**: End-to-end workflow testing
+
 ## 🆘 Troubleshooting
 
 ### Common Issues
@@ -282,6 +351,7 @@ All research outputs undergo rigorous quality assessment:
 2. **Import Errors**: Verify Python version (≥3.12) and dependencies
 3. **Search Failures**: Check internet connection and API quotas
 4. **Parsing Errors**: Review input data format and structure
+5. **MCP Import Errors**: If you see `ModuleNotFoundError: No module named 'string_mcp'`, the import paths in tests have been fixed to use the correct directory structure
 
 ### Debug Mode
 Enable verbose logging:
