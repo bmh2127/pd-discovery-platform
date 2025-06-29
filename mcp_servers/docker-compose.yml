@@ -16,18 +16,10 @@ services:
       - DOCKER_MODE=true
     restart: unless-stopped
     
-  ppx_mcp:
-    build: ./ppx_mcp
-    ports:
-      - "8003:8000"
-    environment:
-      - DOCKER_MODE=true
-    restart: unless-stopped
-    
   biogrid_mcp:
     build: ./biogrid_mcp
     ports:
-      - "8004:8000"
+      - "8003:8000"
     environment:
       - BIOGRID_API_KEY=${BIOGRID_API_KEY}
       - DOCKER_MODE=true
@@ -36,18 +28,16 @@ services:
   cross_database_mcp:
     build: ./cross_database_mcp
     ports:
-      - "8005:8000"
+      - "8004:8000"
     environment:
       - DOCKER_MODE=true
       - STRING_MCP_URL=http://string_mcp:8000
       - PRIDE_MCP_URL=http://pride_mcp:8000
       - BIOGRID_MCP_URL=http://biogrid_mcp:8000
-      - PPX_MCP_URL=http://ppx_mcp:8000
     depends_on:
       - string_mcp
       - pride_mcp
       - biogrid_mcp
-      - ppx_mcp
     restart: unless-stopped
 
 networks:

@@ -18,7 +18,7 @@ The Cross-Database MCP server provides true cross-database integration by orches
 
 ## Features
 
-- **Real-time Integration**: Makes live HTTP calls to STRING, PRIDE, BioGRID, and PPX MCP servers
+- **Real-time Integration**: Makes live HTTP calls to STRING, PRIDE, and BioGRID MCP servers
 - **Environment-Adaptive**: Supports both local development and Docker deployment configurations
 - **Fallback Resilience**: Gracefully handles service unavailability with fallback data
 - **Cross-Validation**: Identifies convergent evidence across multiple databases
@@ -33,7 +33,6 @@ The server uses environment variables to configure service URLs:
 STRING_MCP_URL=http://localhost:8001
 PRIDE_MCP_URL=http://localhost:8002
 BIOGRID_MCP_URL=http://localhost:8003
-PPX_MCP_URL=http://localhost:8004
 ```
 
 ### Docker Deployment
@@ -41,7 +40,6 @@ PPX_MCP_URL=http://localhost:8004
 STRING_MCP_URL=http://string_mcp:8000
 PRIDE_MCP_URL=http://pride_mcp:8000
 BIOGRID_MCP_URL=http://biogrid_mcp:8000
-PPX_MCP_URL=http://ppx_mcp:8000
 ```
 
 ## Setup
@@ -58,11 +56,10 @@ PPX_MCP_URL=http://ppx_mcp:8000
 2. **Local Development**: Start individual MCP servers on their configured ports
    ```bash
    # Start each MCP server in separate terminals
-   cd string_mcp && python server.py
-   cd pride_mcp && python server.py
-   cd biogrid_mcp && python server.py
-   cd ppx_mcp && python server.py
-   cd cross_database_mcp && python server.py
+   cd string_mcp && python server.py     # Port 8001
+   cd pride_mcp && python server.py      # Port 8002  
+   cd biogrid_mcp && python server.py    # Port 8003
+   cd cross_database_mcp && python server.py  # Port 8004
    ```
 
 3. **Docker Deployment**: Use Docker Compose

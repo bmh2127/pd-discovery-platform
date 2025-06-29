@@ -12,7 +12,6 @@ mcp = FastMCP("Cross-Database Integration Server")
 STRING_MCP_URL = os.getenv("STRING_MCP_URL", "http://localhost:8001")
 PRIDE_MCP_URL = os.getenv("PRIDE_MCP_URL", "http://localhost:8002")
 BIOGRID_MCP_URL = os.getenv("BIOGRID_MCP_URL", "http://localhost:8003")
-PPX_MCP_URL = os.getenv("PPX_MCP_URL", "http://localhost:8004")
 
 # === HELPER FUNCTIONS (not decorated - can be called internally) ===
 
