@@ -2,6 +2,7 @@
 from fastmcp import FastMCP
 from pydantic import BaseModel
 import httpx
+import os
 from typing import List, Optional
 import asyncio
 
@@ -159,5 +160,11 @@ async def find_datasets_with_protein(
     return {"matching_datasets": results}
 
 if __name__ == "__main__":
-    mcp.run()
+    # Check if running in Docker (HTTP mode) or locally (stdio mode)
+    if os.getenv("DOCKER_MODE") == "true":
+        # Run with HTTP transport for Docker
+        mcp.run(transport="http", host="0.0.0.0", port=8000)
+    else:
+        # Run with stdio transport for local development
+        mcp.run()
     

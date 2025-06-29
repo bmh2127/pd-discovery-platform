@@ -1,0 +1,27 @@
+# docker-compose.yml
+services:
+  string_mcp:
+    build: ./string_mcp
+    ports:
+      - "8001:8000"
+    restart: unless-stopped
+    
+  pride_mcp:
+    build: ./pride_mcp  
+    ports:
+      - "8002:8000"
+    restart: unless-stopped
+    
+  ppx_mcp:
+    build: ./ppx_mcp
+    ports:
+      - "8003:8000"
+    restart: unless-stopped
+    
+  biogrid_mcp:
+    build: ./biogrid_mcp
+    ports:
+      - "8004:8000"
+    environment:
+      - BIOGRID_API_KEY=${BIOGRID_API_KEY}
+    restart: unless-stopped

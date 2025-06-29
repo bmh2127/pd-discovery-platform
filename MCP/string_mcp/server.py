@@ -3,6 +3,7 @@ from fastmcp import FastMCP
 from pydantic import BaseModel
 import httpx
 import json
+import os
 from typing import List, Optional
 import asyncio
 
@@ -34,7 +35,7 @@ async def map_proteins(
         "format": format
     }
     
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=30.0) as client:
         response = await client.post(url, data=params)
         response.raise_for_status()
         return {"mapped_proteins": response.text}
@@ -57,7 +58,7 @@ async def get_network(
         "add_white_nodes": add_white_nodes
     }
     
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=30.0) as client:
         response = await client.post(url, data=params)
         response.raise_for_status()
         return {"network_data": response.text}
@@ -81,7 +82,7 @@ async def functional_enrichment(
     if background:
         params["background_string_identifiers"] = "\r".join(background)
     
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=60.0) as client:  # Increased timeout for enrichment
         response = await client.post(url, data=params)
         response.raise_for_status()
         return {"enrichment_results": response.text}
@@ -106,4 +107,10 @@ async def get_dopaminergic_markers() -> dict:
     return {"dopaminergic_markers": dopamine_markers}
 
 if __name__ == "__main__":
-    mcp.run()
+    # Check if running in Docker (HTTP mode) or locally (stdio mode)
+    if os.getenv("DOCKER_MODE") == "true":
+        # Run with HTTP transport for Docker
+        mcp.run(transport="http", host="0.0.0.0", port=8000)
+    else:
+        # Run with stdio transport for local development
+        mcp.run()

@@ -26,3 +26,6 @@ dependencies = [
     "seaborn>=0.13.2",
     "statsmodels>=0.14.4",
 ]
+
+[tool.uv.workspace]
+members = ["MCP"]
