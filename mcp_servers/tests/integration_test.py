@@ -4,10 +4,10 @@ import asyncio
 import os
 import json
 
-from MCP.string_mcp import mcp as string_mcp
-from MCP.pride_mcp import mcp as pride_mcp
-from MCP.ppx_mcp import mcp as ppx_mcp
-from MCP.biogrid_mcp import mcp as biogrid_mcp
+from mcp_servers.string_mcp import mcp as string_mcp
+from mcp_servers.pride_mcp import mcp as pride_mcp
+from mcp_servers.ppx_mcp import mcp as ppx_mcp
+from mcp_servers.biogrid_mcp import mcp as biogrid_mcp
 from fastmcp import Client
 
 def extract_content(result):
@@ -19,21 +19,41 @@ def extract_content(result):
             return content_item.text
     return str(result)
 
+def extract_resource_content(resource_result):
+    """Helper to extract JSON content from FastMCP resource result"""
+    if isinstance(resource_result, list) and len(resource_result) > 0:
+        # FastMCP returns list of TextResourceContents objects
+        resource_item = resource_result[0]
+        if hasattr(resource_item, 'text'):
+            text_content = resource_item.text
+            try:
+                # Try to parse as JSON
+                return json.loads(text_content)
+            except json.JSONDecodeError:
+                return text_content
+    return str(resource_result)
+
 @pytest.mark.asyncio
 async def test_complete_pd_workflow_all_mcps():
     """Test complete workflow with all MCP servers including BioGRID"""
     
-    # 1. Get dopaminergic markers
+    # 1. Get dopaminergic markers from resource
     async with Client(string_mcp) as client:
-        markers_result = await client.call_tool("get_dopaminergic_markers", {})
-        markers_content = extract_content(markers_result)
+        markers_resource = await client.read_resource("string://markers/dopaminergic")
+        markers_data = extract_resource_content(markers_resource)
         
-        try:
-            markers_data = json.loads(markers_content)
-            target_proteins = markers_data["dopaminergic_markers"][:5]  # Limit for testing
-        except:
-            # Fallback if JSON parsing fails
-            target_proteins = ["SNCA", "PARK2", "TH", "DRD2", "LRRK2"]
+        # Extract protein list from all categories
+        all_proteins = []
+        for category in markers_data.values():
+            if isinstance(category, dict):
+                all_proteins.extend(category.keys())
+        
+        target_proteins = all_proteins[:5]  # Limit for testing
+        
+        # Create a mock result format for backwards compatibility
+        markers_content = json.dumps({
+            "dopaminergic_markers": target_proteins
+        })
     
     # 2. Get STRING protein network
     async with Client(string_mcp) as client:

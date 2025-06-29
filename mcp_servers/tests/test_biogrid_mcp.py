@@ -4,7 +4,7 @@ import asyncio
 import json
 import os
 
-from MCP.biogrid_mcp import mcp as biogrid_mcp
+from mcp_servers.biogrid_mcp import mcp as biogrid_mcp
 from fastmcp import Client
 
 def extract_content(result):

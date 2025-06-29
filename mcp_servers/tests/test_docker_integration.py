@@ -31,6 +31,20 @@ def extract_result(result):
     else:
         return str(result)
 
+def extract_resource_content(resource_result):
+    """Helper to extract JSON content from FastMCP resource result"""
+    if isinstance(resource_result, list) and len(resource_result) > 0:
+        # FastMCP returns list of TextResourceContents objects
+        resource_item = resource_result[0]
+        if hasattr(resource_item, 'text'):
+            text_content = resource_item.text
+            try:
+                # Try to parse as JSON
+                return json.loads(text_content)
+            except json.JSONDecodeError:
+                return text_content
+    return str(resource_result)
+
 @pytest.fixture(scope="module")
 def docker_services():
     """Start Docker services before tests and stop them after"""
@@ -75,23 +89,24 @@ async def test_docker_string_mcp(docker_services):
     """Test STRING MCP server via Docker HTTP transport"""
     
     async with Client(MCP_ENDPOINTS["string"]) as client:
-        # Test dopaminergic markers
-        result = await client.call_tool("get_dopaminergic_markers", {})
-        result_text = extract_result(result)
+        # Test dopaminergic markers resource
+        markers_resource = await client.read_resource("string://markers/dopaminergic")
+        markers_data = extract_resource_content(markers_resource)
         
         # Verify response
-        assert len(result_text) > 0
-        assert "dopaminergic_markers" in result_text
+        assert "core_markers" in markers_data
+        assert "receptors" in markers_data
+        assert "pd_associated" in markers_data
+        assert "metabolism" in markers_data
         
-        # Parse and verify markers
-        markers_data = json.loads(result_text)
-        assert "dopaminergic_markers" in markers_data
-        assert len(markers_data["dopaminergic_markers"]) >= 10
-        assert "SNCA" in markers_data["dopaminergic_markers"]
+        # Verify specific markers
+        assert "TH" in markers_data["core_markers"]
+        assert "SNCA" in markers_data["pd_associated"]
         
         # Test network retrieval
+        test_proteins = ["SNCA", "PARK2"]
         network_result = await client.call_tool("get_network", {
-            "proteins": ["SNCA", "PARK2"],
+            "proteins": test_proteins,
             "species": 9606,
             "confidence": 0.7
         })
@@ -177,13 +192,18 @@ async def test_docker_biogrid_mcp(docker_services):
 async def test_docker_cross_service_workflow(docker_services):
     """Test complete workflow across all Docker MCP services"""
     
-    # Step 1: Get dopaminergic markers from STRING
+    # Step 1: Get dopaminergic markers from STRING resource
     async with Client(MCP_ENDPOINTS["string"]) as client:
-        markers_result = await client.call_tool("get_dopaminergic_markers", {})
-        markers_content = extract_result(markers_result)
+        markers_resource = await client.read_resource("string://markers/dopaminergic")
+        markers_data = extract_resource_content(markers_resource)
         
-        markers_data = json.loads(markers_content)
-        target_proteins = markers_data["dopaminergic_markers"][:5]
+        # Extract protein list from all categories
+        all_proteins = []
+        for category in markers_data.values():
+            if isinstance(category, dict):
+                all_proteins.extend(category.keys())
+        
+        target_proteins = all_proteins[:5]  # Limit for testing
     
     # Step 2: Get protein interactions from STRING
     async with Client(MCP_ENDPOINTS["string"]) as client:

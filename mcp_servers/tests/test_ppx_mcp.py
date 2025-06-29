@@ -4,7 +4,7 @@ import asyncio
 import json
 import os
 
-from MCP.ppx_mcp import mcp as ppx_mcp
+from mcp_servers.ppx_mcp import mcp as ppx_mcp
 from fastmcp import Client
 
 def extract_content(result):
