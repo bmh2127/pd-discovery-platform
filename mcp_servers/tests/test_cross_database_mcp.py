@@ -371,3 +371,261 @@ async def test_resource_data_consistency():
                 has_error_info = "errors" in result_data or "suggestion" in result_data
                 assert has_error_info, f"Should have error info when protein {protein} cannot be resolved"
                 print(f"Could not resolve {protein} - likely due to service unavailability")
+
+# === MODULAR COMPONENT INTEGRATION TESTS ===
+
+@pytest.mark.asyncio
+async def test_modular_cache_integration(self):
+    """Test that cache system integrates properly with MCP server"""
+    async with Client(cross_db_mcp) as client:
+        # Make same protein resolution twice
+        first_call = await client.call_tool("resolve_protein_entity", {
+            "identifier": "SNCA"
+        })
+        second_call = await client.call_tool("resolve_protein_entity", {
+            "identifier": "SNCA"
+        })
+        
+        # Both calls should succeed
+        assert first_call is not None
+        assert second_call is not None
+        
+        # Extract content
+        first_content = extract_content(first_call)
+        second_content = extract_content(second_call)
+        
+        first_data = json.loads(first_content) if isinstance(first_content, str) else first_content
+        second_data = json.loads(second_content) if isinstance(second_content, str) else second_content
+        
+        # Both should have same query
+        assert first_data["query"] == second_data["query"] == "SNCA"
+        
+        # Second call might be faster due to caching (but we can't assert timing in tests)
+        # Instead, verify that both have proper structure
+        for data in [first_data, second_data]:
+            assert "status" in data
+            assert data["query"] == "SNCA"
+
+@pytest.mark.asyncio
+async def test_modular_gene_mapping_integration(self):
+    """Test that gene mapping works through the MCP interface"""
+    async with Client(cross_db_mcp) as client:
+        # Test alias resolution
+        alias_tests = [
+            ("DAT", "SLC6A3"),  # DAT should map to SLC6A3
+            ("PARK2", "PRKN"),  # PARK2 should map to PRKN
+            ("VMAT2", "SLC18A2")  # VMAT2 should map to SLC18A2
+        ]
+        
+        for alias, expected_canonical in alias_tests:
+            result = await client.call_tool("resolve_protein_entity", {
+                "identifier": alias
+            })
+            assert result is not None
+            
+            content = extract_content(result)
+            data = json.loads(content) if isinstance(content, str) else content
+            
+            # Should handle alias properly (either resolve it or provide helpful info)
+            assert data["query"] == alias
+            assert "status" in data
+            
+            # If resolved, should have database mappings
+            if data["status"] == "resolved":
+                assert "database_mappings" in data
+                print(f"Successfully resolved alias {alias}")
+            else:
+                # Should provide helpful error/suggestion
+                assert "errors" in data or "suggestion" in data
+                print(f"Could not resolve alias {alias} - likely service unavailable")
+
+@pytest.mark.asyncio
+async def test_modular_api_client_integration(self):
+    """Test that API client properly handles service communication"""
+    async with Client(cross_db_mcp) as client:
+        # Test cross-validation which uses API client heavily
+        result = await client.call_tool("cross_validate_interactions", {
+            "proteins": ["SNCA", "TH"],
+            "databases": ["string", "biogrid"],
+            "confidence_threshold": 0.5
+        })
+        
+        assert result is not None
+        content = extract_content(result)
+        data = json.loads(content) if isinstance(content, str) else content
+        
+        # Should have proper structure regardless of service availability
+        assert "proteins" in data
+        assert data["proteins"] == ["SNCA", "TH"]
+        assert "databases_checked" in data
+        assert "confidence_threshold" in data
+        assert data["confidence_threshold"] == 0.5
+        
+        # Should handle service availability gracefully
+        if "database_specific" in data:
+            print(f"Cross-validation successful with databases: {list(data['database_specific'].keys())}")
+        else:
+            print("Cross-validation completed with service unavailability handling")
+
+@pytest.mark.asyncio
+async def test_modular_config_integration(self):
+    """Test that configuration is properly loaded and used"""
+    async with Client(cross_db_mcp) as client:
+        # Test that server responds (configuration loaded correctly)
+        result = await client.call_tool("get_biomarker_candidates", {
+            "disease": "parkinson"
+        })
+        
+        assert result is not None
+        content = extract_content(result)
+        data = json.loads(content) if isinstance(content, str) else content
+        
+        # Should have proper structure from config-driven logic
+        assert "disease" in data
+        assert data["disease"] == "parkinson"
+        assert "candidates" in data
+        
+        # Candidates should reflect properly configured dopaminergic genes
+        if len(data["candidates"]) > 0:
+            # Check that we have known dopaminergic/PD genes
+            candidate_proteins = [c["protein"] for c in data["candidates"]]
+            known_pd_genes = ["SNCA", "PRKN", "TH"]
+            has_known_genes = any(gene in candidate_proteins for gene in known_pd_genes)
+            assert has_known_genes, f"Should include known PD genes, got: {candidate_proteins}"
+
+@pytest.mark.asyncio
+async def test_modular_error_handling_integration(self):
+    """Test that modular error handling works end-to-end"""
+    async with Client(cross_db_mcp) as client:
+        # Test with invalid/unknown protein
+        result = await client.call_tool("resolve_protein_entity", {
+            "identifier": "COMPLETELY_FAKE_PROTEIN_12345"
+        })
+        
+        assert result is not None
+        content = extract_content(result)
+        data = json.loads(content) if isinstance(content, str) else content
+        
+        # Should handle unknown protein gracefully
+        assert data["query"] == "COMPLETELY_FAKE_PROTEIN_12345"
+        assert data["status"] == "not_found"
+        
+        # Should provide helpful suggestion
+        assert "suggestion" in data or "errors" in data
+        
+        # Test workflow with invalid parameters
+        workflow_result = await client.call_tool("execute_pd_workflow", {
+            "target_proteins": [],  # Empty list should be handled
+            "workflow_type": "invalid_workflow"
+        })
+        
+        assert workflow_result is not None
+        workflow_content = extract_content(workflow_result)
+        workflow_data = json.loads(workflow_content) if isinstance(workflow_content, str) else workflow_content
+        
+        # Should handle invalid input gracefully
+        assert "errors" in workflow_data or "workflow_type" in workflow_data
+
+@pytest.mark.asyncio
+async def test_modular_performance_integration(self):
+    """Test that modular design doesn't significantly impact performance"""
+    import time
+    
+    async with Client(cross_db_mcp) as client:
+        # Test multiple concurrent calls
+        start_time = time.time()
+        
+        tasks = []
+        test_proteins = ["SNCA", "TH", "PRKN"]
+        
+        for protein in test_proteins:
+            task = client.call_tool("resolve_protein_entity", {
+                "identifier": protein
+            })
+            tasks.append(task)
+        
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        end_time = time.time()
+        total_time = end_time - start_time
+        
+        # All calls should succeed or fail gracefully
+        assert len(results) == 3
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                print(f"Task {i} failed with exception: {result}")
+            else:
+                assert result is not None
+                content = extract_content(result)
+                data = json.loads(content) if isinstance(content, str) else content
+                assert "query" in data
+                assert data["query"] == test_proteins[i]
+        
+        # Performance should be reasonable (under 30 seconds for 3 concurrent calls)
+        assert total_time < 30.0, f"Concurrent calls took too long: {total_time}s"
+        print(f"Modular integration test completed in {total_time:.2f}s")
+
+@pytest.mark.asyncio
+async def test_systematic_discovery_integration(self):
+    """Test the full systematic discovery workflow with modular components"""
+    async with Client(cross_db_mcp) as client:
+        # Step 1: Get research overview (uses curated data)
+        overview = await client.read_resource("research://parkinson/overview")
+        overview_data = extract_resource_content(overview)
+        
+        established_biomarkers = overview_data["biomarkers"]["established"]
+        test_proteins = established_biomarkers[:2]  # Use first 2 for testing
+        
+        # Step 2: Resolve individual proteins (uses gene mapping + API client + cache)
+        resolution_results = []
+        for protein in test_proteins:
+            result = await client.call_tool("resolve_protein_entity", {
+                "identifier": protein,
+                "target_databases": ["string", "pride"]
+            })
+            resolution_results.append(result)
+        
+        # Step 3: Cross-validate interactions (uses API client + cross validation tools)
+        validation_result = await client.call_tool("cross_validate_interactions", {
+            "proteins": test_proteins,
+            "databases": ["string", "biogrid"],
+            "confidence_threshold": 0.7
+        })
+        
+        # Step 4: Get biomarker candidates (uses evidence-based scoring)
+        candidates_result = await client.call_tool("get_biomarker_candidates", {
+            "disease": "parkinson",
+            "confidence_level": "high"
+        })
+        
+        # Verify the systematic workflow completed
+        assert len(resolution_results) == len(test_proteins)
+        assert validation_result is not None
+        assert candidates_result is not None
+        
+        # Extract and verify data
+        validation_data = json.loads(extract_content(validation_result))
+        candidates_data = json.loads(extract_content(candidates_result))
+        
+        assert validation_data["proteins"] == test_proteins
+        assert candidates_data["disease"] == "parkinson"
+        
+        # Count successful components
+        successful_resolutions = 0
+        for result in resolution_results:
+            if result is not None:
+                data = json.loads(extract_content(result))
+                if data["status"] == "resolved":
+                    successful_resolutions += 1
+        
+        print(f"\n=== Systematic Discovery Integration Results ===")
+        print(f"Test proteins: {test_proteins}")
+        print(f"Successful resolutions: {successful_resolutions}/{len(test_proteins)}")
+        print(f"Cross-validation completed: {validation_result is not None}")
+        print(f"Candidates retrieved: {len(candidates_data.get('candidates', []))}")
+        print(f"All modular components integrated successfully!")
+
+if __name__ == "__main__":
+    # Run with: python -m pytest tests/test_cross_database_mcp.py -v
+    import asyncio
+    asyncio.run(test_systematic_discovery_integration())

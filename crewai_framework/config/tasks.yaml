@@ -1,0 +1,143 @@
+systematic_network_discovery_task:
+  description: >
+    Execute systematic discovery of the complete dopaminergic interaction network to 
+    identify unexpected connections and novel proteins that may reveal early disruption 
+    patterns in Parkinson's disease.
+    
+    Your systematic approach should:
+    1. Get research overview to understand current biomarker landscape and established paradigms
+    2. Build comprehensive dopaminergic reference network using "comprehensive" discovery mode
+    3. Analyze network topology to identify hub proteins and connectivity patterns
+    4. Identify unexpected connections, especially direct pathology-synthesis interactions
+    5. Discover novel proteins through systematic analysis that may represent overlooked components
+    6. Assess pathway completeness to identify research gaps and discovery opportunities
+    
+    Focus on finding evidence that challenges current assumptions by identifying direct 
+    connections between pathology proteins (SNCA, PRKN, LRRK2, PINK1) and synthesis 
+    proteins (TH, DDC) that suggest early dopaminergic disruption rather than protein 
+    aggregation as the primary mechanism.
+    
+    Use confidence threshold of 0.7 for high-quality interactions and include indirect 
+    PD-associated proteins to capture the complete molecular landscape.
+    
+    Research Question: {research_question}
+    
+  expected_output: >
+    Comprehensive network analysis report containing:
+    
+    1. **Complete Dopaminergic Network**: Full interaction network with confidence scores and topology analysis
+    2. **Novel Protein Discoveries**: Proteins that may represent undiscovered dopaminergic components  
+    3. **Unexpected Connections**: High-confidence interactions that challenge current paradigms
+    4. **Functional Clustering**: Analysis of synthesis, transport, receptor, and pathology protein clusters
+    5. **Discovery Insights**: Research priorities and validation recommendations for novel findings
+    6. **Paradigm-Challenging Evidence**: Specific molecular connections that suggest alternative disease mechanisms
+    
+    The analysis should provide quantitative evidence for systematic discovery and identify 
+    specific proteins and interactions that warrant experimental validation to challenge 
+    established paradigms.
+  agent: dopaminergic_network_specialist
+
+cross_database_validation_task:
+  description: >
+    Validate network discoveries across multiple biological databases to establish 
+    convergent evidence and research confidence for paradigm-challenging findings.
+    
+    Your validation process should:
+    1. Cross-validate high-confidence interactions between STRING and BioGRID databases
+    2. Resolve protein entities using canonical gene symbols to ensure consistent mapping
+    3. Identify convergent evidence where interactions appear in multiple databases
+    4. Batch resolve proteins to ensure comprehensive database coverage
+    5. Assess validation confidence and establish research-grade evidence standards
+    6. Prioritize interactions with strongest cross-database support for experimental validation
+    
+    Focus particularly on validating unexpected connections between pathology and 
+    synthesis proteins that challenge the α-synuclein-first paradigm. Cross-validated 
+    interactions provide the strongest evidence for paradigm-challenging research.
+    
+    Use the network discoveries from the systematic discovery task as input for validation analysis.
+    
+  expected_output: >
+    Cross-database validation report containing:
+    
+    1. **Validation Summary**: Overall success rates and confidence metrics across databases
+    2. **Convergent Evidence**: Interactions confirmed across multiple databases with high confidence
+    3. **Database Coverage**: Assessment of protein resolution success across STRING, BioGRID, and PRIDE
+    4. **Cross-Validated Paradigm Evidence**: Validation status of unexpected pathology-synthesis connections
+    5. **Research Confidence Assessment**: Quantitative confidence scores for paradigm-challenging findings  
+    6. **Validation Recommendations**: Priority list of interactions requiring experimental validation
+    
+    The validation should establish which paradigm-challenging discoveries have the 
+    strongest cross-database support and are most suitable for experimental testing.
+  agent: cross_database_validator
+
+paradigm_challenge_analysis_task:
+  description: >
+    Analyze validated network discoveries to identify and quantify evidence that 
+    challenges the α-synuclein-centric paradigm in Parkinson's disease research.
+    
+    Your paradigm analysis should:
+    1. Evaluate strength of evidence for dopaminergic-disruption-first hypothesis vs α-synuclein-first model
+    2. Identify specific molecular mechanisms that challenge current paradigms  
+    3. Quantify paradigm challenge strength based on cross-validated interaction evidence
+    4. Generate temporal disruption hypotheses based on direct pathology-synthesis connections
+    5. Assess α-synuclein's network position to determine if it's causal or consequential
+    6. Create testable hypotheses for experimental validation of paradigm challenges
+    
+    Focus on quantitative analysis of the evidence strength. Count and assess the significance of:
+    - Direct connections between pathology proteins and synthesis machinery
+    - Cross-validated interactions that contradict sequential disease models  
+    - Novel proteins that suggest alternative disease mechanisms
+    - Network topology evidence for early vs late disruption patterns
+    
+    Use both network discovery and validation results to build comprehensive paradigm challenge.
+    
+  expected_output: >
+    Paradigm challenge analysis report containing:
+    
+    1. **Paradigm Challenge Assessment**: Quantitative strength of evidence against α-synuclein-first model
+    2. **Alternative Mechanism Hypothesis**: Detailed dopaminergic-disruption-first disease model
+    3. **Temporal Disruption Evidence**: Analysis of early vs late molecular changes in disease progression
+    4. **α-Synuclein Network Position**: Assessment of whether SNCA is causal or consequential
+    5. **Experimental Validation Plan**: Specific experiments to test paradigm-challenging hypotheses
+    6. **Clinical Translation Implications**: How paradigm shift affects therapeutic target identification
+    
+    The analysis should provide clear, quantitative evidence for when and how dopaminergic 
+    network disruption may precede protein aggregation, with specific recommendations for 
+    experimental validation.
+  agent: paradigm_challenge_analyst
+
+research_synthesis_task:
+  description: >
+    Synthesize discoveries from network analysis, validation, and paradigm challenge 
+    into comprehensive research insights with actionable recommendations for advancing 
+    Parkinson's disease research.
+    
+    Your synthesis should:
+    1. Integrate findings from systematic network discovery, cross-database validation, and paradigm analysis
+    2. Prioritize research targets based on evidence strength, novelty, and translational potential
+    3. Generate experimental validation strategies for the most promising paradigm-challenging findings
+    4. Create research roadmap for systematic validation of dopaminergic-disruption-first hypothesis
+    5. Assess clinical translation potential of discovered molecular targets  
+    6. Provide concrete next steps for challenging current research approaches
+    
+    Create a comprehensive research report that bridges computational discovery with 
+    experimental validation, providing clear guidance for researchers seeking to 
+    challenge established paradigms.
+    
+    Use all previous task outputs to create a unified research strategy focused on 
+    the most promising paradigm-challenging discoveries with strongest cross-database validation.
+    
+  expected_output: >
+    Comprehensive research synthesis report containing:
+    
+    1. **Executive Summary**: Key paradigm-challenging discoveries with quantitative evidence strength
+    2. **Priority Research Targets**: Ranked list of proteins/interactions for experimental validation
+    3. **Experimental Validation Strategy**: Detailed protocols for testing paradigm-challenging hypotheses
+    4. **Clinical Translation Roadmap**: Path from discovery to therapeutic target development
+    5. **Research Recommendations**: Specific approaches for challenging α-synuclein-centric research
+    6. **Future Research Directions**: Long-term strategy for systematic paradigm validation
+    
+    The synthesis should provide researchers with clear, actionable guidance for pursuing 
+    paradigm-challenging research that could fundamentally advance Parkinson's disease 
+    understanding and treatment.
+  agent: research_orchestrator
